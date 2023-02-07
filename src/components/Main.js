@@ -1,14 +1,10 @@
 import React from "react";
+import api from "./Api"
 
-function Main() {
-    // const profileEditButton = document.querySelector('.profile__edit-button');
-
-    // function handleEditProfileClick() {
-    //     const profileEditPopup = document.querySelector('.popup_type_edit');
-    //     profileEditPopup.classList.add('image-popup_opened');
-    // }
-
-    // profileEditButton.addEventListener('click', handleEditProfileClick);
+function Main({ onEditProfile, onAddPlace, onEditAvatar }) {
+    const [userName, setUserName] = React.useState();
+    const [userDescription, setUserDescription] = React.useState();
+    const [userAvatar, setUserAvatar] = React.useState();
 
     return (
         <main>
@@ -17,7 +13,7 @@ function Main() {
                     <div className="profile__image-box">
                         <img className="profile__image" src="#" alt="Фото профиля" />
                         <div className="profile__image-overlay">
-                            <span className="profile__image-edit"></span>
+                            <span className="profile__image-edit" onClick={onEditAvatar}></span>
                         </div>
                     </div>
                     <div className="profile__info">
@@ -25,12 +21,12 @@ function Main() {
                             <h1 className="profile__title" name="name">
                                 Жак-Ив Кусто
                             </h1>
-                            <button className="profile__edit-button" type="button"></button>
+                            <button className="profile__edit-button" type="button" onClick={onEditProfile}></button>
                         </div>
                         <h2 className="profile__subtitle">Исследователь океана</h2>
                     </div>
                 </div>
-                <button className="profile__add-button"></button>
+                <button className="profile__add-button" onClick={onAddPlace}></button>
             </section>
             <section className="elements">
                 <div className="elements__list"></div>
