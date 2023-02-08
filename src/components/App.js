@@ -207,7 +207,7 @@ function App() {
                 </div>
             </div> */}
 
-            <template className="card-element">
+            {/* <template className="card-element">
                 <div className="element">
                     <img className="element__image" />
                     <button className="element__del-button" type="button"></button>
@@ -219,7 +219,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-            </template>
+            </template> */}
         </div>
     );
 }
