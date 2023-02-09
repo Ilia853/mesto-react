@@ -2,11 +2,11 @@ import React from "react";
 import api from "./Api";
 import Card from "./Card";
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar }) {
+function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
     const [userName, setUserName] = React.useState("");
     const [userDescription, setUserDescription] = React.useState("");
     const [userAvatar, setUserAvatar] = React.useState("");
-    const [cards, setCards] = React.useState([]);
+    const [cards, setCards] = React.useState(null);
 
     React.useEffect(() => {
         api.getProfile()
@@ -26,7 +26,16 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar }) {
                 console.log(cardsData);
                 setCards(
                     cardsData.map((item) => {
-                        return <Card key={item._id} id={item._id} name={item.name} link={item.link} score={item.likes.length} />;
+                        return (
+                            <Card
+                                key={item._id}
+                                id={item._id}
+                                name={item.name}
+                                link={item.link}
+                                score={item.likes.length}
+                                onCardClick={onCardClick}
+                            />
+                        );
                     })
                 );
             })

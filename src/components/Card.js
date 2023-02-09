@@ -1,9 +1,15 @@
 import React from "react";
 
-function Card ({id, name, link, score}) {
+
+function Card ({id, name, link, score, onCardClick }) {
+    
+    const handleCardClick = () => {
+        props.onCardClick({name, link});
+    }
+
     return (
         <div className="element">
-            <img className="element__image" style={{ backgroundImage: `url(${link})` }} />
+            <img className="element__image" style={{ backgroundImage: `url(${link})` }} onClick={handleCardClick} />
             <button className="element__del-button" type="button"></button>
             <div className="element__box">
                 <h2 className="element__title">{name}</h2>
