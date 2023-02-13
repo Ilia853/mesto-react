@@ -23,7 +23,6 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
     React.useEffect(() => {
         api.getInitialCards()
             .then((cardsData) => {
-                console.log(cardsData);
                 setCards(
                     cardsData.map((item) => {
                         return (
