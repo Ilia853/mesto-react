@@ -40,6 +40,7 @@ function App() {
                     name="name"
                     id="popup__input-type-name"
                     className="popup__input popup__input_type_name"
+                    placeholder="Имя"
                     required
                     minLength="2"
                     maxLength="40"
@@ -50,6 +51,7 @@ function App() {
                     name="about"
                     id="popup__input-type-job"
                     className="popup__input popup__input_type_job"
+                    placeholder="Занятие"
                     required
                     minLength="2"
                     maxLength="200"
