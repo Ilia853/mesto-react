@@ -9,7 +9,7 @@ function Card ({id, name, link, score, onCardClick }) {
 
     return (
         <div className="element" key={id}>
-            <img className="element__image" src={link} onClick={handleCardClick} />
+            <img className="element__image" alt={name} src={link} onClick={handleCardClick} />
             <button className="element__del-button" type="button"></button>
             <div className="element__box">
                 <h2 className="element__title">{name}</h2>
