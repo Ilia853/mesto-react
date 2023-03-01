@@ -39,11 +39,9 @@ function App() {
                             card={item}
                             key={item._id}
                             id={item._id}
-                            name={item.name}
-                            link={item.link}
-                            likes={item.likes}
                             onCardClick={setSelectedCard}
                             onCardDelete={handleCardDelete}
+                            onCardLike={handleCardLike}
                         />
                     ))
                 );
@@ -51,7 +49,7 @@ function App() {
             .catch((err) => {
                 console.log("initialCards", err);
             });
-    }, []);
+    }, [cards.key]);
 
     const handleCardDelete = (id) => {
         api.delImage(id)
@@ -64,6 +62,16 @@ function App() {
                 console.log("deletingCard", err);
             });
     };
+
+    function handleCardLike(card) {
+        // Снова проверяем, есть ли уже лайк на этой карточке
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        
+        // Отправляем запрос в API и получаем обновлённые данные карточки
+        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+            setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        });
+    }
 
     function closeAllPopups() {
         setIsEditProfilePopupOpen(false);
@@ -82,7 +90,8 @@ function App() {
                         onAddPlace={() => setIsAddPlacePopupOpen(true)}
                         onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
                         onCardClick={setSelectedCard}
-                        onCardDelete={handleCardDelete}
+                        // onCardDelete={handleCardDelete}
+                        // onCardLike={handleCardLike}
                     />
                     <ImagePopup card={selectedCard} onClose={closeAllPopups} />
                     <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
