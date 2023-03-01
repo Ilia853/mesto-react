@@ -8,6 +8,7 @@ import api from "../utils/Api";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import CardsContext from "../contexts/CardsContext";
 import Card from "./Card";
+import EditProfilePopup from "./EditProfilePopup";
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -15,12 +16,12 @@ function App() {
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState({ name: "", link: "" });
     const [currentUser, setCurrentUser] = React.useState("");
-    const [cards, setCards] = React.useState(null);
+    const [cards, setCards] = React.useState([]);
 
     React.useEffect(() => {
         api.getProfile()
             .then((userData) => {
-                console.log(userData)
+                //console.log(userData)
                 setCurrentUser(userData);
             })
             .catch((err) => {
@@ -31,27 +32,38 @@ function App() {
     React.useEffect(() => {
         api.getInitialCards()
             .then((cardsData) => {
-                console.log(cardsData)
+                //console.log(cardsData)
                 setCards(
-                    cardsData.map((item) => {
-                        return (
-                            <Card
-                                card={item}
-                                key={item._id}
-                                id={item._id}
-                                name={item.name}
-                                link={item.link}
-                                likes={item.likes}
-                                onCardClick={setSelectedCard}
-                            />
-                        );
-                    })
+                    cardsData.map((item) => (
+                        <Card
+                            card={item}
+                            key={item._id}
+                            id={item._id}
+                            name={item.name}
+                            link={item.link}
+                            likes={item.likes}
+                            onCardClick={setSelectedCard}
+                            onCardDelete={handleCardDelete}
+                        />
+                    ))
                 );
             })
             .catch((err) => {
                 console.log("initialCards", err);
             });
     }, []);
+
+    const handleCardDelete = (id) => {
+        api.delImage(id)
+            .then(() => {
+                console.log(cards);
+                setCards((cards) => cards.filter((c) => c._id !== id));
+                console.log(id);
+            })
+            .catch((err) => {
+                console.log("deletingCard", err);
+            });
+    };
 
     function closeAllPopups() {
         setIsEditProfilePopupOpen(false);
@@ -70,38 +82,10 @@ function App() {
                         onAddPlace={() => setIsAddPlacePopupOpen(true)}
                         onEditAvatar={() => setIsEditAvatarPopupOpen(true)}
                         onCardClick={setSelectedCard}
+                        onCardDelete={handleCardDelete}
                     />
                     <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-                    <PopupWithForm
-                        title="Редактировать профиль"
-                        name="edit"
-                        isOpen={isEditProfilePopupOpen}
-                        onClose={closeAllPopups}
-                        buttonText="Сохранить"
-                    >
-                        <input
-                            type="text"
-                            name="name"
-                            id="popup__input-type-name"
-                            className="popup__input popup__input_type_name"
-                            placeholder="Имя"
-                            required
-                            minLength="2"
-                            maxLength="40"
-                        />
-                        <span className="popup__input-error-message popup__input-type-name-error"></span>
-                        <input
-                            type="text"
-                            name="about"
-                            id="popup__input-type-job"
-                            className="popup__input popup__input_type_job"
-                            placeholder="Занятие"
-                            required
-                            minLength="2"
-                            maxLength="200"
-                        />
-                        <span className="popup__input-error-message popup__input-type-job-error"></span>
-                    </PopupWithForm>
+                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
                     <PopupWithForm
                         title="Новое место"
                         name="mesto"

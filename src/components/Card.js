@@ -2,7 +2,7 @@ import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
 
-function Card ({id, name, link, likes, onCardClick }) {
+function Card ({card, id, name, link, likes, onCardClick, onCardDelete }) {
 
     const currentUser = React.useContext(CurrentUserContext);
     
@@ -10,7 +10,11 @@ function Card ({id, name, link, likes, onCardClick }) {
         onCardClick({ name, link });
     }
 
-    const isOwn = id === currentUser._id;
+    const handleDeleteClick =() => {
+        onCardDelete(id);
+    }
+
+    const isOwn = card.owner._id === currentUser._id;
 
     const isLiked = likes.some(i => i._id === currentUser._id);
     const cardLikeButtonClassName = ( 
@@ -20,7 +24,7 @@ function Card ({id, name, link, likes, onCardClick }) {
     return (
         <div className="element" key={id}>
             <img className="element__image" alt={name} src={link} onClick={handleCardClick} />
-            {isOwn && <button className="element__del-button" type="button" />}
+            {isOwn && <button className="element__del-button" type="button" onClick={handleDeleteClick} />}
             <div className="element__box">
                 <h2 className="element__title">{name}</h2>
                 <div className="element__like-box">
