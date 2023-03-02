@@ -9,6 +9,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import CardsContext from "../contexts/CardsContext";
 import Card from "./Card";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
@@ -17,6 +18,8 @@ function App() {
     const [selectedCard, setSelectedCard] = React.useState({ name: "", link: "" });
     const [currentUser, setCurrentUser] = React.useState("");
     const [cards, setCards] = React.useState([]);
+    const [cardChange, setCardChange] = React.useState(true);
+    const [avatar, setAvatar] = React.useState("");
 
     React.useEffect(() => {
         api.getProfile()
@@ -49,7 +52,7 @@ function App() {
             .catch((err) => {
                 console.log("initialCards", err);
             });
-    }, [cards.key]);
+    }, [cardChange]);
 
     const handleCardDelete = (id) => {
         api.delImage(id)
@@ -57,6 +60,7 @@ function App() {
                 console.log(cards);
                 setCards((cards) => cards.filter((c) => c._id !== id));
                 console.log(id);
+                setCardChange(!cardChange);
             })
             .catch((err) => {
                 console.log("deletingCard", err);
@@ -68,9 +72,29 @@ function App() {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
         
         // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+        api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
             setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+            setCardChange(!cardChange);
         });
+    }
+
+    function handleUpdateUser(userData) {
+        api.editProfile(userData.name, userData.about)
+            .then(userData => {
+                setCurrentUser(userData);
+                closeAllPopups();
+            })
+            .catch(err => {
+                console.log('editProfile', err);
+            })
+    }
+
+    function handleUpdateAvatar(avatarData) {
+        api.changeAvatar(avatarData.avatar)
+            .then(avatarData => {
+                setAvatar(avatarData);
+                closeAllPopups();
+            })
     }
 
     function closeAllPopups() {
@@ -94,7 +118,8 @@ function App() {
                         // onCardLike={handleCardLike}
                     />
                     <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+                    <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+                    <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
                     <PopupWithForm
                         title="Новое место"
                         name="mesto"
@@ -122,23 +147,6 @@ function App() {
                             required
                         />
                         <span className="popup__input-error-message popup__input-type-link-error"></span>
-                    </PopupWithForm>
-                    <PopupWithForm
-                        title="Обновить аватар"
-                        name="avatar"
-                        isOpen={isEditAvatarPopupOpen}
-                        onClose={closeAllPopups}
-                        buttonText="Сохранить"
-                    >
-                        <input
-                            type="url"
-                            name="avatar"
-                            id="popup__input-type-avatar"
-                            className="popup__input popup__input_type_avatar"
-                            placeholder="Ссылка на новый аватар"
-                            required
-                        />
-                        <span className="popup__input-error-message popup__input-type-avatar-error"></span>
                     </PopupWithForm>
                     <Footer />
                 </CardsContext.Provider>
