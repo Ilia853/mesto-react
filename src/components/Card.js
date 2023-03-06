@@ -2,7 +2,7 @@ import React from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
 
-function Card ({card, id, onCardClick, onCardDelete, onCardLike }) {
+function Card ({card, onCardClick, onCardDelete, onCardLike }) {
 
     const currentUser = React.useContext(CurrentUserContext);
     
@@ -26,7 +26,7 @@ function Card ({card, id, onCardClick, onCardDelete, onCardLike }) {
       );
 
     return (
-        <div className="element" key={id}>
+        <div className="element" >
             <img className="element__image" alt={card.name} src={card.link} onClick={handleCardClick} />
             {isOwn && <button className="element__del-button" type="button" onClick={handleDeleteClick} />}
             <div className="element__box">

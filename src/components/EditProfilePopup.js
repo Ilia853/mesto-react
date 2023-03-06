@@ -18,10 +18,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     }
 
     function handleSubmit(evt) {
-        // Запрещаем браузеру переходить по адресу формы
         evt.preventDefault();
       
-        // Передаём значения управляемых компонентов во внешний обработчик
         onUpdateUser({
           name,
           about: description,
@@ -52,7 +50,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
                             minLength="2"
                             maxLength="40"
                             onChange={handleNameChange}
-                            value={name}
+                            value={name || ""}
                         />
                         <span className="popup__input-error-message popup__input-type-name-error"></span>
                         <input
@@ -65,7 +63,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
                             minLength="2"
                             maxLength="200"
                             onChange={handleDescriptionChange}
-                            value={description}
+                            value={description || ""}
                         />
                         <span className="popup__input-error-message popup__input-type-job-error"></span>
                     </PopupWithForm>

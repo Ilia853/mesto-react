@@ -3,11 +3,10 @@ import PopupWithForm from "./PopupWithForm";
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     const [avatar, setAvatar] = React.useState("");
-    const avatarRef = React.useRef("");
+    const avatarRef = React.useRef();
 
     function handleAvatarChange(evt) {
         setAvatar(evt.target.value);
-        console.log(avatar);
     }
 
     React.useEffect(() => {
@@ -38,7 +37,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
                 placeholder="Ссылка на новый аватар"
                 ref={avatarRef}
                 onChange={handleAvatarChange}
-                value={avatar}
+                value={avatar || ""}
                 required
             />
             <span className="popup__input-error-message popup__input-type-avatar-error"></span>
