@@ -1,11 +1,7 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
-import CardsContext from "../contexts/CardsContext";
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-
-    const cards = React.useContext(CardsContext);
-
     const [cardName, setCardName] = React.useState("");
     const [cardLink, setCardLink] = React.useState("");
 
@@ -16,18 +12,13 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         setCardLink(evt.target.value);
     }
 
-    React.useEffect(() => {
-        setCardName(cards.name);
-        setCardLink(cards.link);
-    }, [cards])
-
     function handleSubmit(evt) {
         evt.preventDefault();
 
         onAddPlace({
             name: cardName,
             link: cardLink,
-        })
+        });
     }
 
     return (

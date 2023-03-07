@@ -9,10 +9,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
         setAvatar(evt.target.value);
     }
 
-    React.useEffect(() => {
-        setAvatar(avatarRef.current.value)
-      }, [avatar]);
-
     function handleSubmit(evt) {
         evt.preventDefault();
         onUpdateAvatar({
@@ -22,7 +18,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
 
     return (
         <PopupWithForm
-            title="Обновить аватар" 
+            title="Обновить аватар"
             name="avatar"
             isOpen={isOpen}
             onClose={onClose}
